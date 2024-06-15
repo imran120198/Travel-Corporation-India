@@ -1,23 +1,18 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Box, Heading } from "@chakra-ui/react";
+import TodoList from "./Components/TodoList";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Box p={4}>
+        <Box>
+          <Heading mb={5} color={"teal"}>
+            Todo Group Status
+          </Heading>
+        </Box>
+        <TodoList />
+      </Box>
     </div>
   );
 }
