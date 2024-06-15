@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { addGroup, setStatuses } from "../Redux/action";
@@ -8,6 +8,21 @@ import Todo from "./Todo";
 const TodoList = () => {
   const dispatch = useDispatch();
   const groups = useSelector((state) => state.groups);
+  const [allTasksCovered, setAllTasksCovered] = useState(false);
+
+  useEffect(() => {
+    checkAllTasksCovered();
+  }, [groups]);
+
+  const checkAllTasksCovered = () => {
+    const tasksCovered = new Array(10).fill(false);
+    groups.forEach((group) => {
+      for (let i = group.from; i <= group.to; i++) {
+        tasksCovered[i - 1] = true;
+      }
+    });
+    setAllTasksCovered(tasksCovered.every((covered) => covered));
+  };
 
   const toast = useToast();
 
@@ -28,6 +43,17 @@ const TodoList = () => {
   };
 
   const handleShowStatus = async () => {
+    if (!allTasksCovered) {
+      toast({
+        description: "You have not added all tasks from 1 to 10.",
+        position: "top",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+
     const allStatuses = await Promise.all(
       groups.map(async (group, index) => {
         const groupStatuses = {};
